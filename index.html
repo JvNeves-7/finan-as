@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador de Finanças</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 430px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px #0002;
+            padding: 32px 20px 24px 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 8px;
+            font-size: 2.1em;
+            letter-spacing: 1px;
+        }
+        .saldo {
+            font-size: 2em;
+            text-align: center;
+            margin: 18px 0 24px 0;
+            color: #2e7d32;
+            background: #e8f5e9;
+            border-radius: 8px;
+            padding: 12px 0;
+            font-weight: bold;
+            box-shadow: 0 2px 8px #2e7d3211;
+        }
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+            justify-content: space-between;
+        }
+        form input, form select {
+            flex: 1 1 120px;
+            min-width: 120px;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #b0bec5;
+            font-size: 1em;
+            background: #f7fafc;
+        }
+        form button {
+            flex: 1 1 100%;
+            padding: 12px;
+            border-radius: 6px;
+            background: #007bff;
+            color: #fff;
+            border: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 4px;
+        }
+        form button:hover {
+            background: #0056b3;
+        }
+        #compartilhar-pdf {
+            width: 100%;
+            margin-bottom: 18px;
+            background: #25d366;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: bold;
+            border-radius: 6px;
+            border: none;
+            padding: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #compartilhar-pdf:hover {
+            background: #128c7e;
+        }
+        #analise-inteligente {
+            background: #f1f8e9;
+            border-radius: 8px;
+            padding: 14px 12px 8px 12px;
+            margin-bottom: 18px;
+            box-shadow: 0 1px 4px #cddc3911;
+        }
+        #analise-inteligente h3 {
+            margin: 0 0 8px 0;
+            color: #558b2f;
+            font-size: 1.1em;
+        }
+        #analise-inteligente ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+        ul#lista-transacoes {
+            margin: 0;
+            padding: 0;
+        }
+        ul#lista-transacoes li {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            background: #f7fafc;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            padding: 10px 12px 8px 12px;
+            box-shadow: 0 1px 4px #b0bec511;
+            border-left: 5px solid #b0bec5;
+            position: relative;
+        }
+        ul#lista-transacoes li .receita {
+            color: #2e7d32;
+        }
+        ul#lista-transacoes li .despesa {
+            color: #c62828;
+        }
+        ul#lista-transacoes li small {
+            color: #607d8b;
+            font-size: 0.95em;
+        }
+        .remover {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            background: none;
+            border: none;
+            color: #c62828;
+            cursor: pointer;
+            font-size: 1.2em;
+            padding: 0 4px;
+            transition: color 0.2s;
+        }
+        .remover:hover {
+            color: #b71c1c;
+        }
+        @media (max-width: 520px) {
+            .container {
+                max-width: 98vw;
+                padding: 10px 2vw 18px 2vw;
+            }
+            form input, form select {
+                min-width: 80px;
+                font-size: 0.98em;
+            }
+            .saldo {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Organizador de Finanças</h1>
+        <div class="saldo" id="saldo">Saldo: R$ 0,00</div>
+        <form id="form-transacao">
+            <input type="text" id="descricao" placeholder="Descrição" required>
+            <input type="number" id="valor" placeholder="Valor" step="0.01" required>
+            <select id="tipo">
+                <option value="receita">Receita</option>
+                <option value="despesa">Despesa</option>
+            </select>
+            <select id="categoria">
+                <option value="Alimentação">Alimentação</option>
+                <option value="Transporte">Transporte</option>
+                <option value="Moradia">Moradia</option>
+                <option value="Lazer">Lazer</option>
+                <option value="Saúde">Saúde</option>
+                <option value="Educação">Educação</option>
+                <option value="Outros">Outros</option>
+            </select>
+            <input type="date" id="data" required>
+            <button type="submit">Adicionar</button>
+        </form>
+        <button id="compartilhar-pdf" style="width:100%;margin-bottom:16px;background:#25d366;">Compartilhar por WhatsApp (PDF)</button>
+        <div id="analise-inteligente" style="margin-top:24px;"></div>
+        <ul id="lista-transacoes"></ul>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        const form = document.getElementById('form-transacao');
+        const lista = document.getElementById('lista-transacoes');
+        const saldoEl = document.getElementById('saldo');
+        let transacoes = [];
+        let orcamentos = {
+            'Alimentação': 500,
+            'Transporte': 300,
+            'Moradia': 1000,
+            'Lazer': 200,
+            'Saúde': 150,
+            'Educação': 250,
+            'Outros': 100
+        };
+
+        function atualizarSaldo() {
+            const saldo = transacoes.reduce((acc, t) => {
+                return t.tipo === 'receita' ? acc + t.valor : acc - t.valor;
+            }, 0);
+            saldoEl.textContent = `Saldo: R$ ${saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+        }
+
+        function salvarTransacoes() {
+            localStorage.setItem('transacoes', JSON.stringify(transacoes));
+        }
+
+        function carregarTransacoes() {
+            const dados = localStorage.getItem('transacoes');
+            if (dados) {
+                transacoes = JSON.parse(dados);
+            }
+        }
+
+        function renderizarTransacoes() {
+            lista.innerHTML = '';
+            transacoes.forEach((t, i) => {
+                const li = document.createElement('li');
+                let dataLabel = t.tipo === 'despesa' ? 'Vencimento' : 'Recebimento';
+                li.innerHTML = `
+                    <span class="${t.tipo}">${t.descricao} - R$ ${t.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})} <small>(${t.categoria})</small><br><small>${dataLabel}: ${t.data ? new Date(t.data).toLocaleDateString('pt-BR') : '-'}</small></span>
+                    <button class="remover" onclick="removerTransacao(${i})">&times;</button>
+                `;
+                lista.appendChild(li);
+            });
+        }
+
+        function analisarInteligente() {
+            if (transacoes.length === 0) {
+                document.getElementById('analise-inteligente').innerHTML = '';
+                return;
+            }
+            // Agrupa despesas por categoria
+            const gastosPorCategoria = {};
+            let totalDespesas = 0;
+            transacoes.forEach(t => {
+                if (t.tipo === 'despesa') {
+                    gastosPorCategoria[t.categoria] = (gastosPorCategoria[t.categoria] || 0) + t.valor;
+                    totalDespesas += t.valor;
+                }
+            });
+            // Previsão: média mensal das despesas
+            const meses = Math.max(1, Math.ceil(transacoes.length / 10)); // suposição: 10 transações por mês
+            let previsao = totalDespesas / meses;
+            // Sugestão de orçamento
+            let sugestoes = '';
+            for (let cat in gastosPorCategoria) {
+                if (gastosPorCategoria[cat] > (orcamentos[cat] || 0)) {
+                    sugestoes += `<li>Você ultrapassou o orçamento de <b>${cat}</b>! Considere reduzir gastos.</li>`;
+                } else if (gastosPorCategoria[cat] > 0.8 * (orcamentos[cat] || 0)) {
+                    sugestoes += `<li>Gastos em <b>${cat}</b> estão próximos do limite. Fique atento!</li>`;
+                }
+            }
+            // Oportunidade de economia
+            let maiorCategoria = Object.entries(gastosPorCategoria).sort((a,b)=>b[1]-a[1])[0];
+            let economia = maiorCategoria ? `<li>O maior gasto é em <b>${maiorCategoria[0]}</b> (R$ ${maiorCategoria[1].toLocaleString('pt-BR', {minimumFractionDigits:2})}). Reveja despesas nesta categoria para economizar.</li>` : '';
+            document.getElementById('analise-inteligente').innerHTML = `
+                <h3>Análise Inteligente</h3>
+                <ul>
+                    <li>Previsão de despesas mensais: <b>R$ ${previsao.toLocaleString('pt-BR', {minimumFractionDigits:2})}</b></li>
+                    ${sugestoes}
+                    ${economia}
+                </ul>
+            `;
+        }
+
+        window.removerTransacao = function(index) {
+            transacoes.splice(index, 1);
+            salvarTransacoes();
+            renderizarTransacoes();
+            atualizarSaldo();
+            analisarInteligente();
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const descricao = document.getElementById('descricao').value.trim();
+            const valor = parseFloat(document.getElementById('valor').value);
+            const tipo = document.getElementById('tipo').value;
+            const categoria = document.getElementById('categoria').value;
+            const data = document.getElementById('data').value;
+            if (!descricao || isNaN(valor) || valor <= 0 || !data) return;
+            transacoes.push({ descricao, valor, tipo, categoria, data });
+            salvarTransacoes();
+            form.reset();
+            renderizarTransacoes();
+            atualizarSaldo();
+            analisarInteligente();
+        });
+
+        document.getElementById('compartilhar-pdf').onclick = function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(16);
+            doc.text('Resumo Financeiro', 10, 15);
+            doc.setFontSize(10);
+            let y = 25;
+            doc.text('Descrição', 10, y);
+            doc.text('Valor', 70, y);
+            doc.text('Tipo', 100, y);
+            doc.text('Categoria', 120, y);
+            doc.text('Data', 160, y);
+            y += 6;
+            transacoes.forEach(t => {
+                doc.text(t.descricao, 10, y);
+                doc.text('R$ ' + t.valor.toLocaleString('pt-BR', {minimumFractionDigits:2}), 70, y);
+                doc.text(t.tipo, 100, y);
+                doc.text(t.categoria, 120, y);
+                doc.text(t.data ? new Date(t.data).toLocaleDateString('pt-BR') : '-', 160, y);
+                y += 6;
+                if (y > 270) { doc.addPage(); y = 15; }
+            });
+            doc.save('financas.pdf');
+            setTimeout(() => {
+                window.open('https://web.whatsapp.com/', '_blank');
+                alert('PDF baixado! Agora anexe o arquivo "financas.pdf" na conversa do WhatsApp Web.');
+            }, 1000);
+        };
+
+        // Carregar dados ao iniciar
+        carregarTransacoes();
+        renderizarTransacoes();
+        atualizarSaldo();
+        analisarInteligente();
+    </script>
+</body>
+</html>
