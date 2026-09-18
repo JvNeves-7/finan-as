@@ -1,333 +1,606 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Organizador de Finanças</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 430px;
-            margin: 40px auto;
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 4px 24px #0002;
-            padding: 32px 20px 24px 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #007bff;
-            margin-bottom: 8px;
-            font-size: 2.1em;
-            letter-spacing: 1px;
-        }
-        .saldo {
-            font-size: 2em;
-            text-align: center;
-            margin: 18px 0 24px 0;
-            color: #2e7d32;
-            background: #e8f5e9;
-            border-radius: 8px;
-            padding: 12px 0;
-            font-weight: bold;
-            box-shadow: 0 2px 8px #2e7d3211;
-        }
-        form {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 18px;
-            justify-content: space-between;
-        }
-        form input, form select {
-            flex: 1 1 120px;
-            min-width: 120px;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #b0bec5;
-            font-size: 1em;
-            background: #f7fafc;
-        }
-        form button {
-            flex: 1 1 100%;
-            padding: 12px;
-            border-radius: 6px;
-            background: #007bff;
-            color: #fff;
-            border: none;
-            font-size: 1.1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 4px;
-        }
-        form button:hover {
-            background: #0056b3;
-        }
-        #compartilhar-pdf {
-            width: 100%;
-            margin-bottom: 18px;
-            background: #25d366;
-            color: #fff;
-            font-size: 1.1em;
-            font-weight: bold;
-            border-radius: 6px;
-            border: none;
-            padding: 12px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-        #compartilhar-pdf:hover {
-            background: #128c7e;
-        }
-        #analise-inteligente {
-            background: #f1f8e9;
-            border-radius: 8px;
-            padding: 14px 12px 8px 12px;
-            margin-bottom: 18px;
-            box-shadow: 0 1px 4px #cddc3911;
-        }
-        #analise-inteligente h3 {
-            margin: 0 0 8px 0;
-            color: #558b2f;
-            font-size: 1.1em;
-        }
-        #analise-inteligente ul {
-            margin: 0;
-            padding-left: 18px;
-        }
-        ul#lista-transacoes {
-            margin: 0;
-            padding: 0;
-        }
-        ul#lista-transacoes li {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            background: #f7fafc;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            padding: 10px 12px 8px 12px;
-            box-shadow: 0 1px 4px #b0bec511;
-            border-left: 5px solid #b0bec5;
-            position: relative;
-        }
-        ul#lista-transacoes li .receita {
-            color: #2e7d32;
-        }
-        ul#lista-transacoes li .despesa {
-            color: #c62828;
-        }
-        ul#lista-transacoes li small {
-            color: #607d8b;
-            font-size: 0.95em;
-        }
-        .remover {
-            position: absolute;
-            right: 10px;
-            top: 10px;
-            background: none;
-            border: none;
-            color: #c62828;
-            cursor: pointer;
-            font-size: 1.2em;
-            padding: 0 4px;
-            transition: color 0.2s;
-        }
-        .remover:hover {
-            color: #b71c1c;
-        }
-        @media (max-width: 520px) {
-            .container {
-                max-width: 98vw;
-                padding: 10px 2vw 18px 2vw;
-            }
-            form input, form select {
-                min-width: 80px;
-                font-size: 0.98em;
-            }
-            .saldo {
-                font-size: 1.3em;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Organizador de Finanças</title>
+<meta name="description" content="Organizador de finanças pessoais: receitas, despesas, dashboard, gráficos, filtros, PDF/CSV e PWA.">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#2563eb">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f172a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Finanças">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon.svg">
+<style>
+  :root{
+    --bg:#f1f5f9; --bg-grad-1:#dbeafe; --bg-grad-2:#f0fdfa;
+    --card:#ffffff; --card-2:#f8fafc;
+    --text:#0f172a; --muted:#64748b; --border:#e2e8f0;
+    --primary:#2563eb; --primary-hover:#1d4ed8; --primary-soft:#dbeafe;
+    --success:#16a34a; --success-soft:#dcfce7;
+    --danger:#dc2626; --danger-soft:#fee2e2;
+    --warning:#ca8a04; --warning-soft:#fef9c3;
+    --shadow:0 10px 30px rgba(2,6,23,.08);
+    --shadow-sm:0 2px 10px rgba(2,6,23,.06);
+    --radius:16px; --radius-sm:10px;
+    --font: "Inter", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  }
+  [data-theme="dark"]{
+    --bg:#020617; --bg-grad-1:#0f172a; --bg-grad-2:#082f2e;
+    --card:#0f172a; --card-2:#1e293b;
+    --text:#f1f5f9; --muted:#94a3b8; --border:#1e293b;
+    --primary:#60a5fa; --primary-hover:#3b82f6; --primary-soft:#1e3a5f;
+    --success:#4ade80; --success-soft:#14532d;
+    --danger:#f87171; --danger-soft:#450a0a;
+    --warning:#facc15; --warning-soft:#422006;
+    --shadow:0 10px 30px rgba(0,0,0,.5);
+    --shadow-sm:0 2px 10px rgba(0,0,0,.4);
+    color-scheme:dark;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:var(--font); color:var(--text);
+    background:linear-gradient(135deg,var(--bg-grad-1),var(--bg-grad-2) 60%,var(--bg));
+    min-height:100vh;
+  }
+  .wrap{max-width:1020px;margin:0 auto;padding:24px 16px 64px}
+  header.top{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    margin-bottom:18px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{
+    width:44px;height:44px;border-radius:12px;display:grid;place-items:center;
+    background:linear-gradient(135deg,#2563eb,#06b6d4);color:#fff;font-weight:800;font-size:22px;
+    box-shadow:var(--shadow-sm);
+  }
+  .brand h1{font-size:1.35rem;margin:0;letter-spacing:-.02em}
+  .brand p{margin:2px 0 0;color:var(--muted);font-size:.88rem}
+  .top-actions{display:flex;gap:8px;flex-wrap:wrap}
+  button,.btn{
+    font-family:inherit;border:1px solid var(--border);background:var(--card);color:var(--text);
+    padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:600;font-size:.95rem;
+    transition:.18s;display:inline-flex;align-items:center;gap:8px;justify-content:center;
+  }
+  button:hover{transform:translateY(-1px)}
+  .btn-primary{background:var(--primary);border-color:var(--primary);color:#fff}
+  .btn-primary:hover{background:var(--primary-hover)}
+  .btn-ghost{background:transparent}
+  .btn-whatsapp{background:#22c55e;border-color:#22c55e;color:#fff}
+  .btn-whatsapp:hover{background:#16a34a}
+  .grid-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+  .card{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+    box-shadow:var(--shadow-sm);padding:16px;
+  }
+  .stat small{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.06em;font-size:.72rem}
+  .stat strong{display:block;font-size:1.6rem;margin-top:6px;letter-spacing:-.02em}
+  .stat.saldo strong{color:var(--success)}
+  .stat.saldo.negativo strong{color:var(--danger)}
+  .stat.receita strong{color:var(--success)}
+  .stat.despesa strong{color:var(--danger)}
+  .stat span.hint{color:var(--muted);font-size:.82rem}
+  .layout{display:grid;grid-template-columns:380px 1fr;gap:14px;align-items:start}
+  .card h2{margin:0 0 12px;font-size:1.05rem}
+  .card h3{margin:18px 0 8px;font-size:.95rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+  form.f{display:grid;gap:10px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  label{font-size:.82rem;font-weight:700;color:var(--muted);display:grid;gap:6px}
+  input,select{
+    width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--border);
+    background:var(--card-2);color:var(--text);font-size:.95rem;font-family:inherit;
+  }
+  input:focus,select:focus,button:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .toolbar input,.toolbar select{flex:1 1 140px}
+  .charts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:14px 0}
+  .chart-box{min-height:260px;display:flex;flex-direction:column}
+  .chart-box canvas{max-height:240px}
+  #analise ul{margin:8px 0;padding-left:18px;display:grid;gap:6px}
+  .badge{
+    display:inline-flex;padding:3px 9px;border-radius:999px;font-size:.75rem;font-weight:800;
+    text-transform:uppercase;letter-spacing:.04em;
+  }
+  .badge.receita{background:var(--success-soft);color:var(--success)}
+  .badge.despesa{background:var(--danger-soft);color:var(--danger)}
+  .badge.cat{background:var(--primary-soft);color:var(--primary)}
+  ul#lista{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px}
+  ul#lista li{
+    display:flex;justify-content:space-between;gap:12px;align-items:flex-start;
+    background:var(--card-2);border:1px solid var(--border);border-left:5px solid var(--muted);
+    border-radius:12px;padding:12px;
+  }
+  ul#lista li.receita{border-left-color:var(--success)}
+  ul#lista li.despesa{border-left-color:var(--danger)}
+  .item-main{min-width:0}
+  .item-title{font-weight:700;overflow:hidden;text-overflow:ellipsis}
+  .item-meta{color:var(--muted);font-size:.85rem;margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .item-valor{font-weight:800;white-space:nowrap}
+  .item-valor.receita{color:var(--success)} .item-valor.despesa{color:var(--danger)}
+  .item-actions{display:flex;gap:6px}
+  .icon-btn{padding:8px 10px;border-radius:9px;font-size:.9rem}
+  .icon-btn.danger{color:var(--danger)}
+  .empty{
+    text-align:center;color:var(--muted);padding:22px;border:1px dashed var(--border);
+    border-radius:12px;background:transparent;
+  }
+  details.orc{margin-top:10px}
+  details.orc summary{cursor:pointer;font-weight:700}
+  .orc-grid{display:grid;grid-template-columns:1fr 120px;gap:8px;align-items:center;margin-top:10px}
+  .orc-grid label{font-weight:600}
+  .exports{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(2,6,23,.55);display:none;place-items:center;padding:16px;z-index:50;
+  }
+  .modal-backdrop.open{display:grid}
+  .modal{width:min(520px,100%);background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);padding:18px}
+  .modal h2{margin:0 0 10px}
+  #toast{
+    position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);
+    background:#0f172a;color:#fff;padding:12px 16px;border-radius:12px;opacity:0;pointer-events:none;
+    transition:.25s;z-index:60;max-width:min(92vw,480px);text-align:center;box-shadow:var(--shadow);
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  [data-theme="dark"] #toast{background:#e2e8f0;color:#0f172a}
+  footer{margin-top:18px;color:var(--muted);font-size:.82rem;text-align:center}
+  .count{font-size:.82rem;color:var(--muted)}
+  @media (max-width:900px){
+    .layout{grid-template-columns:1fr}
+    .grid-cards{grid-template-columns:1fr 1fr}
+    .charts{grid-template-columns:1fr}
+  }
+  @media (max-width:560px){
+    .wrap{padding:14px 10px 48px}
+    .grid-cards{grid-template-columns:1fr}
+    .row2{grid-template-columns:1fr}
+    .stat strong{font-size:1.35rem}
+    .top-actions{width:100%} .top-actions button{flex:1}
+  }
+</style>
 </head>
 <body>
-    <div class="container">
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">R$</div>
+      <div>
         <h1>Organizador de Finanças</h1>
-        <div class="saldo" id="saldo">Saldo: R$ 0,00</div>
-        <form id="form-transacao">
-            <input type="text" id="descricao" placeholder="Descrição" required>
-            <input type="number" id="valor" placeholder="Valor" step="0.01" required>
-            <select id="tipo">
-                <option value="receita">Receita</option>
-                <option value="despesa">Despesa</option>
-            </select>
-            <select id="categoria">
-                <option value="Alimentação">Alimentação</option>
-                <option value="Transporte">Transporte</option>
-                <option value="Moradia">Moradia</option>
-                <option value="Lazer">Lazer</option>
-                <option value="Saúde">Saúde</option>
-                <option value="Educação">Educação</option>
-                <option value="Outros">Outros</option>
-            </select>
-            <input type="date" id="data" required>
-            <button type="submit">Adicionar</button>
-        </form>
-        <button id="compartilhar-pdf" style="width:100%;margin-bottom:16px;background:#25d366;">Compartilhar por WhatsApp (PDF)</button>
-        <div id="analise-inteligente" style="margin-top:24px;"></div>
-        <ul id="lista-transacoes"></ul>
+        <p>Controle simples • dashboard • offline • PWA</p>
+      </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script>
-        const form = document.getElementById('form-transacao');
-        const lista = document.getElementById('lista-transacoes');
-        const saldoEl = document.getElementById('saldo');
-        let transacoes = [];
-        let orcamentos = {
-            'Alimentação': 500,
-            'Transporte': 300,
-            'Moradia': 1000,
-            'Lazer': 200,
-            'Saúde': 150,
-            'Educação': 250,
-            'Outros': 100
-        };
+    <div class="top-actions">
+      <button id="btn-tema" class="btn-ghost" title="Alternar tema" aria-label="Alternar tema">🌙 Tema</button>
+      <button id="btn-instalar" class="btn-ghost" hidden>📲 Instalar</button>
+    </div>
+  </header>
 
-        function atualizarSaldo() {
-            const saldo = transacoes.reduce((acc, t) => {
-                return t.tipo === 'receita' ? acc + t.valor : acc - t.valor;
-            }, 0);
-            saldoEl.textContent = `Saldo: R$ ${saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+  <section class="grid-cards" aria-label="Resumo">
+    <div class="card stat saldo" id="card-saldo">
+      <small>Saldo atual</small>
+      <strong id="saldo">R$ 0,00</strong>
+      <span class="hint" id="saldo-hint">—</span>
+    </div>
+    <div class="card stat receita">
+      <small>Receitas</small>
+      <strong id="total-receitas">R$ 0,00</strong>
+      <span class="hint" id="count-receitas">0 lançamentos</span>
+    </div>
+    <div class="card stat despesa">
+      <small>Despesas</small>
+      <strong id="total-despesas">R$ 0,00</strong>
+      <span class="hint" id="count-despesas">0 lançamentos</span>
+    </div>
+  </section>
+
+  <div class="layout">
+    <section class="card" aria-label="Nova transação">
+      <h2>＋ Nova transação</h2>
+      <form id="form" class="f" autocomplete="off">
+        <label>Descrição
+          <input id="descricao" type="text" placeholder="Ex: Salário, Mercado, Aluguel" required maxlength="80">
+        </label>
+        <div class="row2">
+          <label>Valor (R$)
+            <input id="valor" type="number" placeholder="0,00" step="0.01" min="0.01" required>
+          </label>
+          <label>Data
+            <input id="data" type="date" required>
+          </label>
+        </div>
+        <div class="row2">
+          <label>Tipo
+            <select id="tipo">
+              <option value="receita">Receita</option>
+              <option value="despesa">Despesa</option>
+            </select>
+          </label>
+          <label>Categoria
+            <select id="categoria"></select>
+          </label>
+        </div>
+        <button class="btn-primary" type="submit">Adicionar</button>
+      </form>
+
+      <h3>Orçamentos mensais</h3>
+      <details class="orc">
+        <summary>Ver / editar limites por categoria</summary>
+        <div id="orcamentos"></div>
+      </details>
+
+      <h3>Exportar / compartilhar</h3>
+      <div class="exports">
+        <button id="btn-pdf" title="Baixar PDF">🧾 PDF</button>
+        <button id="btn-csv" title="Baixar CSV">📊 CSV</button>
+        <button id="btn-wa" class="btn-whatsapp" title="Compartilhar no WhatsApp">💬 WhatsApp</button>
+      </div>
+    </section>
+
+    <main>
+      <section class="card" aria-label="Filtros">
+        <h2>Filtros e busca <span class="count" id="filtro-count"></span></h2>
+        <div class="toolbar">
+          <input id="busca" type="search" placeholder="🔍 Buscar descrição...">
+          <select id="f-tipo" aria-label="Filtrar por tipo">
+            <option value="todas">Todos os tipos</option>
+            <option value="receita">Receitas</option>
+            <option value="despesa">Despesas</option>
+          </select>
+          <select id="f-categoria" aria-label="Filtrar por categoria">
+            <option value="todas">Todas categorias</option>
+          </select>
+          <input id="f-mes" type="month" aria-label="Filtrar por mês">
+          <button id="btn-limpar" class="btn-ghost" type="button">Limpar</button>
+        </div>
+      </section>
+
+      <section class="charts">
+        <div class="card chart-box">
+          <h2>Despesas por categoria</h2>
+          <canvas id="graf-categorias" height="220" aria-label="Gráfico de despesas por categoria"></canvas>
+        </div>
+        <div class="card chart-box">
+          <h2>Receitas × Despesas (6 meses)</h2>
+          <canvas id="graf-fluxo" height="220" aria-label="Gráfico de fluxo mensal"></canvas>
+        </div>
+      </section>
+
+      <section class="card" id="analise" aria-label="Análise inteligente">
+        <h2>🧠 Análise inteligente</h2>
+        <div id="analise-conteudo"></div>
+      </section>
+
+      <section class="card" style="margin-top:14px" aria-label="Transações">
+        <h2>Transações</h2>
+        <ul id="lista"></ul>
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    Dados salvos localmente no navegador (localStorage) • Funciona offline após primeira visita • v2 modernizada
+  </footer>
+</div>
+
+<div class="modal-backdrop" id="modal-bg">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+    <h2 id="modal-titulo">Editar transação</h2>
+    <form id="form-edit" class="f">
+      <label>Descrição <input id="e-descricao" required maxlength="80"></label>
+      <div class="row2">
+        <label>Valor (R$) <input id="e-valor" type="number" step="0.01" min="0.01" required></label>
+        <label>Data <input id="e-data" type="date" required></label>
+      </div>
+      <div class="row2">
+        <label>Tipo
+          <select id="e-tipo"><option value="receita">Receita</option><option value="despesa">Despesa</option></select>
+        </label>
+        <label>Categoria <select id="e-categoria"></select></label>
+      </div>
+      <div class="row2">
+        <button type="button" id="btn-cancelar" class="btn-ghost">Cancelar</button>
+        <button type="submit" class="btn-primary">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+(function(){
+  "use strict";
+  const CATEGORIAS = ["Alimentação","Transporte","Moradia","Lazer","Saúde","Educação","Outros"];
+  const CORES = {
+    "Alimentação":"#f59e0b","Transporte":"#3b82f6","Moradia":"#8b5cf6",
+    "Lazer":"#ec4899","Saúde":"#10b981","Educação":"#06b6d4","Outros":"#64748b"
+  };
+  const KEY_T = "financas.transacoes.v2", KEY_O = "financas.orcamentos.v2", KEY_TH = "financas.tema";
+  const $ = (id)=>document.getElementById(id);
+  const fmtBRL = (v)=> (v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+  const fmtData = (iso)=>{ if(!iso) return "-"; const d = new Date(iso+"T12:00:00"); return isNaN(d)?"-":d.toLocaleDateString("pt-BR"); };
+  const uid = ()=> (crypto.randomUUID?crypto.randomUUID():"id-"+Date.now()+"-"+Math.random().toString(16).slice(2));
+  const hojeISO = ()=>{ const d=new Date(); return d.toISOString().slice(0,10); };
+
+  let transacoes = [];
+  let orcamentos = { "Alimentação":500,"Transporte":300,"Moradia":1000,"Lazer":200,"Saúde":150,"Educação":250,"Outros":100 };
+  let filtros = { busca:"", tipo:"todas", categoria:"todas", mes:"" };
+  let editId = null, chartCat=null, chartFluxo=null, deferredPrompt=null;
+
+  function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove("show"),2600); }
+
+  // ---- Tema ----
+  function initTema(){
+    const salvo = localStorage.getItem(KEY_TH);
+    const pref = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light";
+    document.documentElement.dataset.theme = salvo || pref;
+    atualizaBtnTema();
+  }
+  function atualizaBtnTema(){
+    const dark = document.documentElement.dataset.theme==="dark";
+    $("btn-tema").textContent = dark ? "☀️ Tema" : "🌙 Tema";
+  }
+  $("btn-tema").addEventListener("click",()=>{
+    const atual = document.documentElement.dataset.theme==="dark"?"light":"dark";
+    document.documentElement.dataset.theme = atual;
+    localStorage.setItem(KEY_TH, atual); atualizaBtnTema();
+  });
+
+  // ---- Storage + migração v1 ----
+  function carregar(){
+    try{
+      const raw = localStorage.getItem(KEY_T);
+      if(raw){ transacoes = JSON.parse(raw)||[]; }
+      else {
+        const legado = localStorage.getItem("transacoes");
+        if(legado){
+          const arr = JSON.parse(legado)||[];
+          transacoes = arr.map(t=>({id:uid(),descricao:t.descricao,valor:Number(t.valor)||0,tipo:t.tipo,categoria:t.categoria||"Outros",data:t.data||hojeISO()}));
+          salvar();
         }
+      }
+      const o = localStorage.getItem(KEY_O);
+      if(o){ const parsed=JSON.parse(o); CATEGORIAS.forEach(c=>{ if(typeof parsed[c]==="number") orcamentos[c]=parsed[c]; }); }
+    }catch(e){ console.warn(e); transacoes=[]; }
+    transacoes = transacoes.filter(t=>t && typeof t.valor==="number").map(t=>({id:t.id||uid(),descricao:String(t.descricao||"Sem descrição"),valor:Number(t.valor)||0,tipo:t.tipo==="receita"?"receita":"despesa",categoria:CATEGORIAS.includes(t.categoria)?t.categoria:"Outros",data:t.data||hojeISO()}));
+  }
+  function salvar(){ localStorage.setItem(KEY_T, JSON.stringify(transacoes)); localStorage.setItem(KEY_O, JSON.stringify(orcamentos)); }
 
-        function salvarTransacoes() {
-            localStorage.setItem('transacoes', JSON.stringify(transacoes));
-        }
+  // ---- Selects / orçamentos ----
+  function preencherCategorias(){
+    const opts = CATEGORIAS.map(c=>`<option value="${c}">${c}</option>`).join("");
+    $("categoria").innerHTML = opts; $("e-categoria").innerHTML = opts;
+    $("f-categoria").innerHTML = `<option value="todas">Todas categorias</option>`+opts;
+  }
+  function renderOrcamentos(){
+    $("orcamentos").innerHTML = CATEGORIAS.map(c=>`
+      <div class="orc-grid"><label>${c}</label>
+      <input type="number" min="0" step="10" data-orc="${c}" value="${orcamentos[c]??0}" aria-label="Orçamento ${c}">
+      </div>`).join("");
+    $("orcamentos").querySelectorAll("[data-orc]").forEach(inp=>{
+      inp.addEventListener("change",()=>{
+        const c = inp.dataset.orc;
+        orcamentos[c] = Math.max(0, Number(inp.value)||0);
+        salvar(); renderAll(); toast(`Orçamento de ${c} atualizado`);
+      });
+    });
+  }
 
-        function carregarTransacoes() {
-            const dados = localStorage.getItem('transacoes');
-            if (dados) {
-                transacoes = JSON.parse(dados);
-            }
-        }
+  // ---- Cálculos ----
+  function totais(lista){
+    let r=0,d=0; lista.forEach(t=>{ t.tipo==="receita"?r+=t.valor:d+=t.valor; });
+    return {receitas:r,despesas:d,saldo:r-d};
+  }
+  function getFiltradas(){
+    const b = filtros.busca.trim().toLowerCase();
+    return transacoes
+      .filter(t=>{
+        if(filtros.tipo!=="todas" && t.tipo!==filtros.tipo) return false;
+        if(filtros.categoria!=="todas" && t.categoria!==filtros.categoria) return false;
+        if(filtros.mes && !(t.data||"").startsWith(filtros.mes)) return false;
+        if(b && !(t.descricao||"").toLowerCase().includes(b)) return false;
+        return true;
+      })
+      .sort((a,b2)=>(b2.data||"").localeCompare(a.data||""));
+  }
 
-        function renderizarTransacoes() {
-            lista.innerHTML = '';
-            transacoes.forEach((t, i) => {
-                const li = document.createElement('li');
-                let dataLabel = t.tipo === 'despesa' ? 'Vencimento' : 'Recebimento';
-                li.innerHTML = `
-                    <span class="${t.tipo}">${t.descricao} - R$ ${t.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})} <small>(${t.categoria})</small><br><small>${dataLabel}: ${t.data ? new Date(t.data).toLocaleDateString('pt-BR') : '-'}</small></span>
-                    <button class="remover" onclick="removerTransacao(${i})">&times;</button>
-                `;
-                lista.appendChild(li);
-            });
-        }
+  // ---- Renders ----
+  function renderResumo(){
+    const t = totais(transacoes);
+    $("saldo").textContent = fmtBRL(t.saldo);
+    $("total-receitas").textContent = fmtBRL(t.receitas);
+    $("total-despesas").textContent = fmtBRL(t.despesas);
+    $("card-saldo").classList.toggle("negativo", t.saldo<0);
+    const cr = transacoes.filter(x=>x.tipo==="receita").length, cd = transacoes.length-cr;
+    $("count-receitas").textContent = `${cr} lançamento(s)`;
+    $("count-despesas").textContent = `${cd} lançamento(s)`;
+    const meses = new Set(transacoes.map(x=>(x.data||"").slice(0,7)).filter(Boolean)).size||1;
+    $("saldo-hint").textContent = transacoes.length? `Média mensal de despesas: ${fmtBRL(t.despesas/meses)}` : "Adicione sua primeira transação";
+  }
+  function renderLista(){
+    const lista = getFiltradas(), ul = $("lista");
+    $("filtro-count").textContent = (lista.length!==transacoes.length)?`• ${lista.length} de ${transacoes.length}`:`• ${transacoes.length}`;
+    if(!lista.length){ ul.innerHTML = `<div class="empty">${transacoes.length?"Nenhum resultado para os filtros.":"Nenhuma transação ainda. Adicione ao lado 👈"}</div>`; return; }
+    ul.innerHTML = lista.map(t=>`
+      <li class="${t.tipo}">
+        <div class="item-main">
+          <div class="item-title">${escapeHtml(t.descricao)}</div>
+          <div class="item-meta">
+            <span class="badge ${t.tipo}">${t.tipo}</span>
+            <span class="badge cat">${escapeHtml(t.categoria)}</span>
+            <span>📅 ${fmtData(t.data)}</span>
+          </div>
+        </div>
+        <div style="display:grid;gap:8px;justify-items:end">
+          <span class="item-valor ${t.tipo}">${t.tipo==="receita"?"+":"−"} ${fmtBRL(t.valor)}</span>
+          <div class="item-actions">
+            <button class="icon-btn" data-act="edit" data-id="${t.id}" title="Editar">✏️</button>
+            <button class="icon-btn danger" data-act="del" data-id="${t.id}" title="Excluir">🗑️</button>
+          </div>
+        </div>
+      </li>`).join("");
+  }
+  function renderAnalise(){
+    const box = $("analise-conteudo");
+    if(!transacoes.length){ box.innerHTML = `<p style="color:var(--muted);margin:0">Sem dados suficientes. Adicione transações para ver previsão e alertas.</p>`; return; }
+    const gastos = {}; let totalD=0;
+    transacoes.forEach(t=>{ if(t.tipo==="despesa"){ gastos[t.categoria]=(gastos[t.categoria]||0)+t.valor; totalD+=t.valor; }});
+    const meses = new Set(transacoes.map(t=>(t.data||"").slice(0,7)).filter(Boolean)).size||1;
+    const previsao = totalD/meses;
+    let sug = "";
+    for(const cat in gastos){
+      const lim = orcamentos[cat]||0;
+      if(lim>0 && gastos[cat]>lim) sug += `<li>⚠️ Você ultrapassou o orçamento de <b>${cat}</b> (${fmtBRL(gastos[cat])} de ${fmtBRL(lim)}). Considere reduzir.</li>`;
+      else if(lim>0 && gastos[cat]>0.8*lim) sug += `<li>👀 Gastos em <b>${cat}</b> estão em ${Math.round(gastos[cat]/lim*100)}% do limite. Fique atento.</li>`;
+    }
+    const top = Object.entries(gastos).sort((a,b)=>b[1]-a[1])[0];
+    const eco = top?`<li>💡 Maior gasto em <b>${top[0]}</b> (${fmtBRL(top[1])}). Reveja essa categoria para economizar.</li>`:"";
+    const taxa = totais(transacoes);
+    const saude = taxa.receitas>0 ? Math.max(0,Math.round(taxa.saldo/taxa.receitas*100)) : 0;
+    box.innerHTML = `<ul>
+      <li>📈 Previsão de despesas mensais: <b>${fmtBRL(previsao)}</b> (base: ${meses} mês(es))</li>
+      <li>💰 Taxa de poupança: <b>${saude}%</b> da receita</li>
+      ${sug}${eco||"<li>✅ Nenhum orçamento estourado. Bom trabalho!</li>"}
+    </ul>`;
+  }
+  function renderCharts(){
+    if(!window.Chart) return;
+    Chart.defaults.color = getComputedStyle(document.documentElement).getPropertyValue("--muted")||"#64748b";
+    Chart.defaults.borderColor = getComputedStyle(document.documentElement).getPropertyValue("--border")||"#e2e8f0";
+    // Doughnut
+    const gastos={}; transacoes.forEach(t=>{ if(t.tipo==="despesa") gastos[t.categoria]=(gastos[t.categoria]||0)+t.valor; });
+    const labels = Object.keys(gastos), vals = labels.map(l=>gastos[l]);
+    if(chartCat) chartCat.destroy();
+    chartCat = new Chart($("graf-categorias"),{type:"doughnut",
+      data:{labels:labels.length?labels:["Sem despesas"],datasets:[{data:vals.length?vals:[1],backgroundColor:labels.map(l=>CORES[l]||"#64748b"),borderWidth:2}]},
+      options:{plugins:{legend:{position:"bottom",labels:{boxWidth:12}}},cutout:"62%"}});
+    // Fluxo 6 meses
+    const chaves=[]; const base=new Date(); base.setDate(1);
+    for(let i=5;i>=0;i--){ const d=new Date(base.getFullYear(),base.getMonth()-i,1); chaves.push(d.toISOString().slice(0,7)); }
+    const rec = chaves.map(k=>transacoes.filter(t=>t.tipo==="receita"&&(t.data||"").startsWith(k)).reduce((a,t)=>a+t.valor,0));
+    const des = chaves.map(k=>transacoes.filter(t=>t.tipo==="despesa"&&(t.data||"").startsWith(k)).reduce((a,t)=>a+t.valor,0));
+    const nomes = chaves.map(k=>{ const [a,m]=k.split("-"); return `${m}/${a.slice(2)}`; });
+    if(chartFluxo) chartFluxo.destroy();
+    chartFluxo = new Chart($("graf-fluxo"),{type:"bar",
+      data:{labels:nomes,datasets:[
+        {label:"Receitas",data:rec,backgroundColor:"#22c55e",borderRadius:6},
+        {label:"Despesas",data:des,backgroundColor:"#ef4444",borderRadius:6}]},
+      options:{plugins:{legend:{position:"bottom"}},scales:{y:{beginAtZero:true,ticks:{callback:v=>"R$ "+v}}}}});
+  }
+  function renderAll(){ renderResumo(); renderLista(); renderAnalise(); renderCharts(); }
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
 
-        function analisarInteligente() {
-            if (transacoes.length === 0) {
-                document.getElementById('analise-inteligente').innerHTML = '';
-                return;
-            }
-            // Agrupa despesas por categoria
-            const gastosPorCategoria = {};
-            let totalDespesas = 0;
-            transacoes.forEach(t => {
-                if (t.tipo === 'despesa') {
-                    gastosPorCategoria[t.categoria] = (gastosPorCategoria[t.categoria] || 0) + t.valor;
-                    totalDespesas += t.valor;
-                }
-            });
-            // Previsão: média mensal das despesas
-            const meses = Math.max(1, Math.ceil(transacoes.length / 10)); // suposição: 10 transações por mês
-            let previsao = totalDespesas / meses;
-            // Sugestão de orçamento
-            let sugestoes = '';
-            for (let cat in gastosPorCategoria) {
-                if (gastosPorCategoria[cat] > (orcamentos[cat] || 0)) {
-                    sugestoes += `<li>Você ultrapassou o orçamento de <b>${cat}</b>! Considere reduzir gastos.</li>`;
-                } else if (gastosPorCategoria[cat] > 0.8 * (orcamentos[cat] || 0)) {
-                    sugestoes += `<li>Gastos em <b>${cat}</b> estão próximos do limite. Fique atento!</li>`;
-                }
-            }
-            // Oportunidade de economia
-            let maiorCategoria = Object.entries(gastosPorCategoria).sort((a,b)=>b[1]-a[1])[0];
-            let economia = maiorCategoria ? `<li>O maior gasto é em <b>${maiorCategoria[0]}</b> (R$ ${maiorCategoria[1].toLocaleString('pt-BR', {minimumFractionDigits:2})}). Reveja despesas nesta categoria para economizar.</li>` : '';
-            document.getElementById('analise-inteligente').innerHTML = `
-                <h3>Análise Inteligente</h3>
-                <ul>
-                    <li>Previsão de despesas mensais: <b>R$ ${previsao.toLocaleString('pt-BR', {minimumFractionDigits:2})}</b></li>
-                    ${sugestoes}
-                    ${economia}
-                </ul>
-            `;
-        }
+  // ---- CRUD ----
+  $("form").addEventListener("submit",(e)=>{
+    e.preventDefault();
+    const descricao=$("descricao").value.trim(), valor=parseFloat($("valor").value),
+          tipo=$("tipo").value, categoria=$("categoria").value, data=$("data").value;
+    if(!descricao||isNaN(valor)||valor<=0||!data){ toast("Preencha descrição, valor > 0 e data."); return; }
+    transacoes.push({id:uid(),descricao,valor,tipo,categoria,data});
+    salvar(); e.target.reset(); $("data").value = hojeISO();
+    renderAll(); toast("Transação adicionada ✅");
+  });
+  $("lista").addEventListener("click",(e)=>{
+    const btn = e.target.closest("[data-act]"); if(!btn) return;
+    const id = btn.dataset.id;
+    if(btn.dataset.act==="del"){
+      transacoes = transacoes.filter(t=>t.id!==id);
+      salvar(); renderAll(); toast("Transação excluída");
+    } else {
+      const t = transacoes.find(x=>x.id===id); if(!t) return;
+      editId=id; $("e-descricao").value=t.descricao; $("e-valor").value=t.valor;
+      $("e-tipo").value=t.tipo; $("e-categoria").value=t.categoria; $("e-data").value=t.data;
+      $("modal-bg").classList.add("open");
+    }
+  });
+  $("btn-cancelar").addEventListener("click",()=>$("modal-bg").classList.remove("open"));
+  $("modal-bg").addEventListener("click",(e)=>{ if(e.target.id==="modal-bg") e.target.classList.remove("open"); });
+  document.addEventListener("keydown",(e)=>{ if(e.key==="Escape") $("modal-bg").classList.remove("open"); });
+  $("form-edit").addEventListener("submit",(e)=>{
+    e.preventDefault();
+    const t = transacoes.find(x=>x.id===editId); if(!t) return;
+    t.descricao=$("e-descricao").value.trim()||t.descricao;
+    t.valor=Math.max(0.01,parseFloat($("e-valor").value)||t.valor);
+    t.tipo=$("e-tipo").value; t.categoria=$("e-categoria").value; t.data=$("e-data").value||t.data;
+    salvar(); $("modal-bg").classList.remove("open"); renderAll(); toast("Transação atualizada ✏️");
+  });
 
-        window.removerTransacao = function(index) {
-            transacoes.splice(index, 1);
-            salvarTransacoes();
-            renderizarTransacoes();
-            atualizarSaldo();
-            analisarInteligente();
-        }
+  // ---- Filtros ----
+  $("busca").addEventListener("input",(e)=>{ filtros.busca=e.target.value; renderLista(); });
+  $("f-tipo").addEventListener("change",(e)=>{ filtros.tipo=e.target.value; renderLista(); });
+  $("f-categoria").addEventListener("change",(e)=>{ filtros.categoria=e.target.value; renderLista(); });
+  $("f-mes").addEventListener("change",(e)=>{ filtros.mes=e.target.value; renderLista(); });
+  $("btn-limpar").addEventListener("click",()=>{
+    filtros={busca:"",tipo:"todas",categoria:"todas",mes:""};
+    $("busca").value="";$("f-tipo").value="todas";$("f-categoria").value="todas";$("f-mes").value="";
+    renderLista();
+  });
 
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const descricao = document.getElementById('descricao').value.trim();
-            const valor = parseFloat(document.getElementById('valor').value);
-            const tipo = document.getElementById('tipo').value;
-            const categoria = document.getElementById('categoria').value;
-            const data = document.getElementById('data').value;
-            if (!descricao || isNaN(valor) || valor <= 0 || !data) return;
-            transacoes.push({ descricao, valor, tipo, categoria, data });
-            salvarTransacoes();
-            form.reset();
-            renderizarTransacoes();
-            atualizarSaldo();
-            analisarInteligente();
-        });
+  // ---- Exports ----
+  function csvEscape(v){ v=String(v??""); return /[;"\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
+  $("btn-csv").addEventListener("click",()=>{
+    if(!transacoes.length){ toast("Nada para exportar"); return; }
+    const linhas = [["Descrição","Valor","Tipo","Categoria","Data"],
+      ...transacoes.map(t=>[t.descricao,t.valor.toFixed(2),t.tipo,t.categoria,t.data])];
+    const csv = "﻿"+linhas.map(l=>l.map(csvEscape).join(";")).join("\n");
+    const a=document.createElement("a");
+    a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));
+    a.download="financas.csv"; a.click(); URL.revokeObjectURL(a.href);
+    toast("CSV baixado 📊");
+  });
+  $("btn-pdf").addEventListener("click",()=>{
+    try{
+      const { jsPDF } = window.jspdf; const doc = new jsPDF();
+      const t = totais(transacoes);
+      doc.setFontSize(16); doc.text("Resumo Financeiro",10,15);
+      doc.setFontSize(10);
+      doc.text(`Saldo: ${fmtBRL(t.saldo)}  |  Receitas: ${fmtBRL(t.receitas)}  |  Despesas: ${fmtBRL(t.despesas)}`,10,22);
+      let y=30;
+      const cols=[10,75,105,130,165];
+      doc.setFont(undefined,"bold");
+      ["Descrição","Valor","Tipo","Categoria","Data"].forEach((h,i)=>doc.text(h,cols[i],y));
+      doc.setFont(undefined,"normal"); y+=6;
+      transacoes.forEach(tr=>{
+        if(y>275){doc.addPage();y=15;}
+        doc.text(String(tr.descricao).slice(0,32),cols[0],y);
+        doc.text(fmtBRL(tr.valor),cols[1],y);
+        doc.text(tr.tipo,cols[2],y);
+        doc.text(String(tr.categoria).slice(0,14),cols[3],y);
+        doc.text(fmtData(tr.data),cols[4],y);
+        y+=6;
+      });
+      doc.save("financas.pdf"); toast("PDF baixado 🧾");
+    }catch(e){ toast("Falha ao gerar PDF"); }
+  });
+  $("btn-wa").addEventListener("click",()=>{
+    const t = totais(transacoes);
+    const linhas = transacoes.slice(-10).map(x=>`• ${x.descricao} ${x.tipo==="receita"?"+":"-"}${fmtBRL(x.valor)} (${x.categoria} ${fmtData(x.data)})`);
+    const msg = `*Resumo Financeiro*\nSaldo: ${fmtBRL(t.saldo)}\nReceitas: ${fmtBRL(t.receitas)}\nDespesas: ${fmtBRL(t.despesas)}\n\n${linhas.join("\n")}\n\nGerado pelo Organizador de Finanças`;
+    window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
+  });
 
-        document.getElementById('compartilhar-pdf').onclick = function() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.setFontSize(16);
-            doc.text('Resumo Financeiro', 10, 15);
-            doc.setFontSize(10);
-            let y = 25;
-            doc.text('Descrição', 10, y);
-            doc.text('Valor', 70, y);
-            doc.text('Tipo', 100, y);
-            doc.text('Categoria', 120, y);
-            doc.text('Data', 160, y);
-            y += 6;
-            transacoes.forEach(t => {
-                doc.text(t.descricao, 10, y);
-                doc.text('R$ ' + t.valor.toLocaleString('pt-BR', {minimumFractionDigits:2}), 70, y);
-                doc.text(t.tipo, 100, y);
-                doc.text(t.categoria, 120, y);
-                doc.text(t.data ? new Date(t.data).toLocaleDateString('pt-BR') : '-', 160, y);
-                y += 6;
-                if (y > 270) { doc.addPage(); y = 15; }
-            });
-            doc.save('financas.pdf');
-            setTimeout(() => {
-                window.open('https://web.whatsapp.com/', '_blank');
-                alert('PDF baixado! Agora anexe o arquivo "financas.pdf" na conversa do WhatsApp Web.');
-            }, 1000);
-        };
+  // ---- PWA ----
+  window.addEventListener("beforeinstallprompt",(e)=>{ e.preventDefault(); deferredPrompt=e; $("btn-instalar").hidden=false; });
+  $("btn-instalar").addEventListener("click",async()=>{
+    if(!deferredPrompt) return;
+    deferredPrompt.prompt(); await deferredPrompt.userChoice;
+    deferredPrompt=null; $("btn-instalar").hidden=true;
+  });
+  if("serviceWorker" in navigator){
+    window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+  }
 
-        // Carregar dados ao iniciar
-        carregarTransacoes();
-        renderizarTransacoes();
-        atualizarSaldo();
-        analisarInteligente();
-    </script>
+  // ---- Init ----
+  preencherCategorias(); carregar(); renderOrcamentos();
+  $("data").value = hojeISO();
+  initTema(); renderAll();
+  // Re-render charts on theme change (cores do eixo)
+  new MutationObserver(()=>renderCharts()).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+})();
+</script>
 </body>
 </html>
